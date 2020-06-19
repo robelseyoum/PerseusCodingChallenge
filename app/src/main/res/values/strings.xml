@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PerseusCodingChallenge</string>
+    <string name="google_geolocation">AIzaSyDcyPXTOXprOVAYPYB3davsfCwcYRKYvgI</string>
+    <string name="duration">Duration</string>
+    <string name="risetime">Risetime</string>
+    <string name="satellite_image">Satellite Image</string>
+    <string name="dummy_message">Dummy Message</string>
+    <string name="retry">Retry</string>
+
+
+</resources>
