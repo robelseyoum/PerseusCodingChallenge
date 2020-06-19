@@ -28,10 +28,6 @@ class SpaceActivity : BaseActivity() {
 
     private val PERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
-
-    lateinit var mContext: Context
-    lateinit var latitude: String
-    lateinit var longitude: String
     lateinit var currentDate: String
 
     @Inject
@@ -45,7 +41,6 @@ class SpaceActivity : BaseActivity() {
         viewModel = ViewModelProvider(this, providerFactory).get(SpaceViewModel::class.java)
 
         mFusedLocationClient  = LocationServices.getFusedLocationProviderClient(this)
-
         getLastLocation()
         currentDate()
     }
@@ -100,7 +95,7 @@ class SpaceActivity : BaseActivity() {
         mLocationRequest.numUpdates = 1
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mFusedLocationClient!!.requestLocationUpdates(
+        mFusedLocationClient.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
             Looper.myLooper()
         )

@@ -2,19 +2,14 @@ package com.robelseyoum3.perseuscodingchallenge.ui.space
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.OpenNotify
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.data.repository.SpaceRepository
-import com.robelseyoum3.perseuscodingchallenge.utils.Constant.Companion.LATITUDE
-import com.robelseyoum3.perseuscodingchallenge.utils.Constant.Companion.LONGITUDE
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
 
 class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepository): ViewModel(){
-
-    val TAG: String = "AppDebug"
 
     fun getISSOverheadLocation(latitude: String, longitude: String) {
 
@@ -27,31 +22,30 @@ class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepos
                 lastFetchedTime = Date()
 
                 if (it.response.isEmpty()) {
-                        errorMessage.value = "No Overhead Space Location"
-                        loadingState.value = LoadingState.ERROR
+                        loadingState.value = LoadingState.ERROR("No Overhead Space Location")
                     } else {
-                    results.value = it.response.toMutableList()
-                    loadingState.value = LoadingState.SUCCESS
+                    notifyResults.value = it.response.toMutableList()
+                    loadingState.value = LoadingState.SUCCESS(it.response.toMutableList())
                 }
             },
             {
                 lastFetchedTime = Date()
                 it.printStackTrace()
-
-                when(it){
-                    is UnknownHostException -> errorMessage.value = "No Network"
-                    else -> errorMessage.value = it.localizedMessage
-                }
-                loadingState.value = LoadingState.ERROR
+                loadingState.value = LoadingState.ERROR(
+                    when(it){
+                        is UnknownHostException -> "No Network"
+                        else -> it.localizedMessage
+                    }
+                )
             })
         )
     }
 
 
-    enum class LoadingState {
-        LOADING,
-        SUCCESS,
-        ERROR
+    sealed class LoadingState {
+        object LOADING: LoadingState()
+        data class SUCCESS(val response: MutableList<Response>): LoadingState()
+        data class ERROR(val message: String): LoadingState()
     }
 
     override fun onCleared() {
@@ -61,9 +55,7 @@ class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepos
 
     private val disposable = CompositeDisposable()
 
-    var results: MutableLiveData<MutableList<Response>> = MutableLiveData()
-
-    val errorMessage: MutableLiveData<String> = MutableLiveData()
+    private var notifyResults: MutableLiveData<MutableList<Response>> = MutableLiveData()
 
     val loadingState = MutableLiveData<LoadingState>()
 

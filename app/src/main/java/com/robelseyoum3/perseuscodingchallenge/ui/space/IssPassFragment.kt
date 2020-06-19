@@ -10,13 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.ui.adapter.SpaceAdapter
-
-
-
-import kotlinx.android.synthetic.main.activity_space.*
-import kotlinx.android.synthetic.main.activity_space.view.*
 import kotlinx.android.synthetic.main.fragment_isspasstimes.*
-import kotlinx.android.synthetic.main.fragment_isspasstimes.view.*
+
 
 class IssPassFragment : BaseSpaceFragment() {
 
@@ -41,40 +36,33 @@ class IssPassFragment : BaseSpaceFragment() {
 
     private fun subscribes(latitude: String, longitude: String) {
 
-         if(viewModel.lastFetchedTime == null){
-             viewModel.getISSOverheadLocation(latitude, longitude)
-         }
+        if(viewModel.lastFetchedTime == null){
+            viewModel.getISSOverheadLocation(latitude, longitude)
+        }
 
-         viewModel.results.observe(viewLifecycleOwner, Observer { responses ->
-//             setupRecyclerView()
-             spaceAdapter.notify.addAll(responses)
-         })
-
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
-            tvMessage.text = it
-        })
-
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            when(it){
-                SpaceViewModel.LoadingState.LOADING -> displayProgressbar()
-                SpaceViewModel.LoadingState.SUCCESS ->  displayList()
-                SpaceViewModel.LoadingState.ERROR -> displayMessageContainer()
-                else -> displayMessageContainer()
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer { data ->
+            when(data){
+                is SpaceViewModel.LoadingState.LOADING -> displayProgressbar()
+                is SpaceViewModel.LoadingState.SUCCESS ->  displayList(data.response)
+                is SpaceViewModel.LoadingState.ERROR -> displayMessageContainer(data.message)
+                else -> displayMessageContainer("Unknown Error")
             }
         })
-
     }
 
-    private fun displayMessageContainer() {
-            llMessageContainer.visibility = View.VISIBLE
-            rvList.visibility = View.GONE
+    private fun displayMessageContainer(message: String) {
+        llMessageContainer.visibility = View.VISIBLE
+        rvList.visibility = View.GONE
         progress_bar_frg.visibility = View.GONE
-
+        tvMessage.text = message
     }
 
-    private fun displayList() {
-           llMessageContainer.visibility = View.GONE
-            rvList.visibility = View.VISIBLE
+    private fun displayList(list: MutableList<Response>) {
+        spaceAdapter.notify.clear()
+        spaceAdapter.notify.addAll(list)
+        spaceAdapter.notifyDataSetChanged()
+        llMessageContainer.visibility = View.GONE
+        rvList.visibility = View.VISIBLE
         progress_bar_frg.visibility = View.GONE
     }
 
