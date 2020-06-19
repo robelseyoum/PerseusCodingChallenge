@@ -15,24 +15,18 @@ import javax.inject.Inject
 class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepository): ViewModel(){
 
     val TAG: String = "AppDebug"
-    private val disposable = CompositeDisposable()
-
-    var results: MutableLiveData<MutableList<Response>> = MutableLiveData()
-
-    val errorMessage: MutableLiveData<String> = MutableLiveData()
-
-    val loadingState = MutableLiveData<LoadingState>()
-
-    var lastFetchedTime: Date? = null
 
     fun getISSOverheadLocation(latitude: String, longitude: String) {
+
         loadingState.value = LoadingState.LOADING
+
         disposable.add(
+
         spaceRepository.getFromSpaceStation(latitude, longitude)
             .subscribe({
                 lastFetchedTime = Date()
 
-                if (it == null) {
+                if (it.response.isEmpty()) {
                         errorMessage.value = "No Overhead Space Location"
                         loadingState.value = LoadingState.ERROR
                     } else {
@@ -48,9 +42,7 @@ class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepos
                     is UnknownHostException -> errorMessage.value = "No Network"
                     else -> errorMessage.value = it.localizedMessage
                 }
-
                 loadingState.value = LoadingState.ERROR
-
             })
         )
     }
@@ -66,4 +58,14 @@ class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepos
         super.onCleared()
         disposable.clear()
     }
+
+    private val disposable = CompositeDisposable()
+
+    var results: MutableLiveData<MutableList<Response>> = MutableLiveData()
+
+    val errorMessage: MutableLiveData<String> = MutableLiveData()
+
+    val loadingState = MutableLiveData<LoadingState>()
+
+    var lastFetchedTime: Date? = null
 }

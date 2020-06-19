@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.ui.adapter.SpaceAdapter
-import com.robelseyoum3.perseuscodingchallenge.utils.Constant.Companion.LATITUDE
-import com.robelseyoum3.perseuscodingchallenge.utils.Constant.Companion.LONGITUDE
+
 
 
 import kotlinx.android.synthetic.main.activity_space.*
+import kotlinx.android.synthetic.main.activity_space.view.*
 import kotlinx.android.synthetic.main.fragment_isspasstimes.*
+import kotlinx.android.synthetic.main.fragment_isspasstimes.view.*
 
 class IssPassFragment : BaseSpaceFragment() {
 
@@ -29,10 +30,10 @@ class IssPassFragment : BaseSpaceFragment() {
         return inflater.inflate(R.layout.fragment_isspasstimes, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "IssPassFragment: ${viewModel.hashCode()} ")
+        setupRecyclerView()
         val latitude = arguments?.getString(LATITUDE1).orEmpty()
         val longitude = arguments?.getString(LONGITUDE1).orEmpty()
         subscribes(latitude, longitude)
@@ -45,7 +46,8 @@ class IssPassFragment : BaseSpaceFragment() {
          }
 
          viewModel.results.observe(viewLifecycleOwner, Observer { responses ->
-             setupRecyclerView(responses)
+//             setupRecyclerView()
+             spaceAdapter.notify.addAll(responses)
          })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
@@ -64,33 +66,27 @@ class IssPassFragment : BaseSpaceFragment() {
     }
 
     private fun displayMessageContainer() {
-        if(llMessageContainer != null && progress_bar != null) {
             llMessageContainer.visibility = View.VISIBLE
             rvList.visibility = View.GONE
-            progress_bar.visibility = View.GONE
-        }
+        progress_bar_frg.visibility = View.GONE
+
     }
 
     private fun displayList() {
-        if(llMessageContainer != null && progress_bar != null){
-            llMessageContainer.visibility = View.VISIBLE
+           llMessageContainer.visibility = View.GONE
             rvList.visibility = View.VISIBLE
-            progress_bar.visibility = View.GONE
-        }
+        progress_bar_frg.visibility = View.GONE
     }
 
     private fun displayProgressbar() {
-        if(llMessageContainer != null && progress_bar != null) {
-
-            progress_bar.visibility = View.VISIBLE
-            rvList.visibility = View.GONE
-            llMessageContainer.visibility = View.GONE
-        }
+        progress_bar_frg.visibility = View.VISIBLE
+        rvList.visibility = View.GONE
+        llMessageContainer.visibility = View.GONE
     }
 
-    private fun setupRecyclerView(list: MutableList<Response>) {
-            rvList.layoutManager = LinearLayoutManager(context)
-            spaceAdapter = SpaceAdapter(list)
+    private fun setupRecyclerView() {
+            rvList.layoutManager = LinearLayoutManager(view?.context)
+            spaceAdapter = SpaceAdapter(mutableListOf())
             rvList.adapter = spaceAdapter
     }
 
