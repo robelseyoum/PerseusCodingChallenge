@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.ui.adapter.SpaceAdapter
+import com.robelseyoum3.perseuscodingchallenge.utils.Resource
 import kotlinx.android.synthetic.main.fragment_isspasstimes.*
 
 
@@ -40,17 +41,17 @@ class IssPassFragment : BaseSpaceFragment() {
             viewModel.getISSOverheadLocation(latitude, longitude)
         }
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer { data ->
-            when(data){
-                is SpaceViewModel.LoadingState.LOADING -> displayProgressbar()
-                is SpaceViewModel.LoadingState.SUCCESS ->  displayList(data.response)
-                is SpaceViewModel.LoadingState.ERROR -> displayMessageContainer(data.message)
-                else -> displayMessageContainer("Unknown Error")
-            }
+        viewModel.notifyResults.observe(viewLifecycleOwner, Observer {
+            when(it){
+                    is Resource.Loading -> displayProgressbar()
+                    is Resource.Success -> displayList(it.data!!.toMutableList())
+                    is Resource.Error -> displayMessageContainer(it.message)
+                    else -> displayMessageContainer("Unknown Error")
+                }
         })
     }
 
-    private fun displayMessageContainer(message: String) {
+    private fun displayMessageContainer(message: String?) {
         llMessageContainer.visibility = View.VISIBLE
         rvList.visibility = View.GONE
         progress_bar_frg.visibility = View.GONE
@@ -67,9 +68,10 @@ class IssPassFragment : BaseSpaceFragment() {
     }
 
     private fun displayProgressbar() {
-        progress_bar_frg.visibility = View.VISIBLE
-        rvList.visibility = View.GONE
-        llMessageContainer.visibility = View.GONE
+            progress_bar_frg.visibility = View.VISIBLE
+            rvList.visibility = View.GONE
+            llMessageContainer.visibility = View.GONE
+
     }
 
     private fun setupRecyclerView() {

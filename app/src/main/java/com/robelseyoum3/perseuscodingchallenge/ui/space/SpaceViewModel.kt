@@ -3,7 +3,9 @@ package com.robelseyoum3.perseuscodingchallenge.ui.space
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
+import com.robelseyoum3.perseuscodingchallenge.data.model.nasaimage.EarthPicture
 import com.robelseyoum3.perseuscodingchallenge.data.repository.SpaceRepository
+import com.robelseyoum3.perseuscodingchallenge.utils.Resource
 import io.reactivex.disposables.CompositeDisposable
 import java.net.UnknownHostException
 import java.util.*
@@ -13,51 +15,73 @@ class SpaceViewModel @Inject constructor(private val spaceRepository: SpaceRepos
 
     fun getISSOverheadLocation(latitude: String, longitude: String) {
 
-        loadingState.value = LoadingState.LOADING
+        notifyResults.value =  Resource.Loading(null)
 
         disposable.add(
-
         spaceRepository.getFromSpaceStation(latitude, longitude)
             .subscribe({
                 lastFetchedTime = Date()
 
                 if (it.response.isEmpty()) {
-                        loadingState.value = LoadingState.ERROR("No Overhead Space Location")
+                  notifyResults.value =   Resource.Error("No Overhead Space Location", null)
                     } else {
-                    notifyResults.value = it.response.toMutableList()
-                    loadingState.value = LoadingState.SUCCESS(it.response.toMutableList())
+                    notifyResults.value = Resource.Success(it.response.toMutableList())
                 }
             },
             {
                 lastFetchedTime = Date()
                 it.printStackTrace()
-                loadingState.value = LoadingState.ERROR(
+                notifyResults.value = Resource.Error(
                     when(it){
                         is UnknownHostException -> "No Network"
                         else -> it.localizedMessage
-                    }
+                    },
+                    null
                 )
             })
         )
     }
 
 
-    sealed class LoadingState {
-        object LOADING: LoadingState()
-        data class SUCCESS(val response: MutableList<Response>): LoadingState()
-        data class ERROR(val message: String): LoadingState()
+    fun  getSatelliteImage(url: String){
+
+        nasaImageResults.value = Resource.Loading(null)
+
+        disposable.add(
+             spaceRepository.getNasaLocationImage(url)
+                 .subscribe({
+                  lastFetchedTime = Date()
+                     if(it.url.isEmpty()){
+                         nasaImageResults.value = Resource.Error("No Image found from NASA", null)
+                     } else{
+                         nasaImageResults.value = Resource.Success(it)
+                     }
+                 }, {
+                     lastFetchedTime = Date()
+                     it.printStackTrace()
+                     nasaImageResults.value = Resource.Error(
+                         when(it){
+                             is UnknownHostException -> "No Network"
+                             else -> it.localizedMessage
+                         },
+                         null
+                     )
+                 })
+        )
     }
+
+
+    private val disposable = CompositeDisposable()
+
+    var notifyResults: MutableLiveData<Resource<MutableList<Response>>> = MutableLiveData()
+
+    var nasaImageResults: MutableLiveData<Resource<EarthPicture>> = MutableLiveData()
+
+
+    var lastFetchedTime: Date? = null
 
     override fun onCleared() {
         super.onCleared()
         disposable.clear()
     }
-
-    private val disposable = CompositeDisposable()
-
-    private var notifyResults: MutableLiveData<MutableList<Response>> = MutableLiveData()
-
-    val loadingState = MutableLiveData<LoadingState>()
-
-    var lastFetchedTime: Date? = null
 }
