@@ -6,6 +6,7 @@
     <string name="satellite_image">Satellite Image</string>
     <string name="dummy_message">Dummy Message</string>
     <string name="retry">Retry</string>
+    <string name="image">Image</string>
 
 
 </resources>

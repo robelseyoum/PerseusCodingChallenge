@@ -16,6 +16,9 @@ import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.ui.BaseActivity
 import com.robelseyoum3.perseuscodingchallenge.viewmodel.ViewModelProviderFactory
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
@@ -28,7 +31,7 @@ class SpaceActivity : BaseActivity() {
 
     private val PERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
-    lateinit var currentDate: String
+    private lateinit var currentDate: String
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -79,7 +82,8 @@ class SpaceActivity : BaseActivity() {
     }
 
     private fun passCoordination(latitude: String, longitude: String)  {
-        val coordinateNumber = IssPassFragment.newInstance(latitude, longitude)
+        currentDate = SimpleDateFormat("yyy-MM-dd", Locale.getDefault()).format(Date())
+        val coordinateNumber = IssPassFragment.newInstance(latitude, longitude, currentDate)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, coordinateNumber, "IssPassFragment")
             .commit()
