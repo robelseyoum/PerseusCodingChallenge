@@ -1,4 +1,4 @@
-package com.robelseyoum3.perseuscodingchallenge.viewmodel
+package com.robelseyoum3.perseuscodingchallenge.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

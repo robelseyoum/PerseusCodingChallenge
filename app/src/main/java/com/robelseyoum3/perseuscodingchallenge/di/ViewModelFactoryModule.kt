@@ -1,7 +1,7 @@
 package com.robelseyoum3.perseuscodingchallenge.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.robelseyoum3.perseuscodingchallenge.viewmodel.ViewModelProviderFactory
+import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
 import dagger.Binds
 import dagger.Module
 

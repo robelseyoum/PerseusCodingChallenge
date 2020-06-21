@@ -1,10 +1,9 @@
 package com.robelseyoum3.perseuscodingchallenge.ui.space
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.robelseyoum3.perseuscodingchallenge.viewmodel.ViewModelProviderFactory
+import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 

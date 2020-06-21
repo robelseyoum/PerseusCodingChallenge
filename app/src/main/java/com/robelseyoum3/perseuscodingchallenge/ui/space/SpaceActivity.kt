@@ -14,13 +14,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.ui.BaseActivity
-import com.robelseyoum3.perseuscodingchallenge.viewmodel.ViewModelProviderFactory
+import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
 import android.provider.Settings
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import java.text.SimpleDateFormat
 import java.util.*
