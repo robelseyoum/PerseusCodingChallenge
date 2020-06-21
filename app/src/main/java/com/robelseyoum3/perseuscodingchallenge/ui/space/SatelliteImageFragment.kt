@@ -48,7 +48,8 @@ class SatelliteImageFragment : BaseSpaceFragment() {
     }
 
     private fun subscribes(latitude: String, longitude: String, date: String) {
-        var basUrl = "$BASE_URL_NASA$longitude$LAT$latitude$DATE_PLACEHOLDER$date$API_KEY_PLACEHOLDER$API_KEY"
+        val sampleDate = "2020-06-20" //use this sample date if the API didn't response the IMAGE with a current date
+        val basUrl = "$BASE_URL_NASA$longitude$LAT$latitude$DATE_PLACEHOLDER$sampleDate$API_KEY_PLACEHOLDER$API_KEY"
         Log.d(TAG, "SatelliteImageFragment_baseUrl: $basUrl ")
 
         viewModel.getSatelliteImage(basUrl)
@@ -65,14 +66,9 @@ class SatelliteImageFragment : BaseSpaceFragment() {
     }
 
     private fun displayImage(data: EarthPicture?) {
-        Log.d(TAG, "SatelliteImageFragment_id: ${data?.id} ")
-//        view?.let {
-//            Glide.with(it.context)
-//                .load(data?.url)
-//                .into(earth_image)
-//        }
+        llMessageContainer_img.visibility = View.GONE
         Picasso.get().load(data!!.url).into(earth_image)
-
+        progress_bar_img.visibility = View.GONE
     }
 
 
