@@ -10,7 +10,7 @@ abstract class ActivityBuildersModule {
 
 
     @ContributesAndroidInjector(
-        modules = [SpaceFragmentBuildersModule::class, SpaceViewModelModule::class]
+        modules = [SpaceFragmentBuildersModule::class, SpaceViewModelModule::class, NasaImageViewModelModule::class]
     )
     abstract fun contributeSpaceActivity(): SpaceActivity
 

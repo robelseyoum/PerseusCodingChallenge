@@ -5,7 +5,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class EarthPicture(
     @SerializedName("date")
     val date: String,
@@ -17,12 +16,11 @@ data class EarthPicture(
     val serviceVersion: String,
     @SerializedName("url")
     val url: String
-): Parcelable
+)
 
-@Parcelize
 data class Resource(
     @SerializedName("dataset")
     val dataset: String,
     @SerializedName("planet")
     val planet: String
-): Parcelable
+)

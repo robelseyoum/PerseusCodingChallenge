@@ -1,6 +1,7 @@
 package com.robelseyoum3.perseuscodingchallenge.data.remote
 
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.OpenNotify
+import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.data.model.nasaimage.EarthPicture
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.ENDPOINT
 import io.reactivex.Single
@@ -15,14 +16,6 @@ interface WebServices {
         @Query("lat") lat: String?,
         @Query("lon") lon: String?
     ): Single<OpenNotify>
-
-
-//    @GET
-//    fun getNasaLocationImage(
-//        @Query("lat") lat: String?,
-//        @Query("lon") lon: String?,
-//        @Query("apikey") apiKey: String?
-//    ): Single<EarthPicture>
 
     @GET
     fun getNasaLocationImage(

@@ -3,21 +3,32 @@ package com.robelseyoum3.perseuscodingchallenge.ui.space
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.ui.adapter.SpaceAdapter
-import com.robelseyoum3.perseuscodingchallenge.utils.Resource
+import com.robelseyoum3.perseuscodingchallenge.ui.nasaImage.SatelliteImageFragment
+import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_isspasstimes.*
+import javax.inject.Inject
 
 
-class IssPassFragment : BaseSpaceFragment() {
+class IssPassFragment : DaggerFragment() {
 
     lateinit var spaceAdapter: SpaceAdapter
     lateinit var latitude: String
     lateinit var longitude: String
     lateinit var currentDate: String
+
+    @Inject
+    lateinit var providerFactory: ViewModelProviderFactory
+
+    lateinit var viewModel: SpaceViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +41,11 @@ class IssPassFragment : BaseSpaceFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "IssPassFragment: ${viewModel.hashCode()} ")
+        viewModel = activity?.run {
+            ViewModelProvider(this, providerFactory).get(SpaceViewModel::class.java)
+        }?: throw Exception("Invalid Activity")
+
+   //     Log.d(TAG, "IssPassFragment: ${viewModel.hashCode()} ")
         setupRecyclerView()
         latitude = arguments?.getString(LATITUDE1).orEmpty()
         longitude = arguments?.getString(LONGITUDE1).orEmpty()
@@ -45,11 +60,11 @@ class IssPassFragment : BaseSpaceFragment() {
         }
 
 
-        viewModel.notifyResults.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             when(it){
-                    is Resource.Loading -> displayProgressbar()
-                    is Resource.Success -> displayList(it.data!!.toMutableList())
-                    is Resource.Error -> displayMessageContainer(it.message)
+                    is SpaceViewModel.LoadingState.LOADING -> displayProgressbar()
+                    is SpaceViewModel.LoadingState.SUCCESS-> displayList(it.response.toMutableList())
+                    is SpaceViewModel.LoadingState.ERROR -> displayMessageContainer(it.message)
                     else -> displayMessageContainer("Unknown Error")
                 }
         })
@@ -96,7 +111,8 @@ class IssPassFragment : BaseSpaceFragment() {
     }
 
     private fun triggerNasaImage() {
-        val satelliteImageFragment = SatelliteImageFragment()
+        val satelliteImageFragment =
+            SatelliteImageFragment()
         val args = Bundle()
         args.apply {
             putString(LATITUDE1, latitude)
