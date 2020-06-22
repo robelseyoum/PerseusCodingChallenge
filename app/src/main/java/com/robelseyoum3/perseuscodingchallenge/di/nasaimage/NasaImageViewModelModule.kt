@@ -1,6 +1,7 @@
-package com.robelseyoum3.perseuscodingchallenge.di
+package com.robelseyoum3.perseuscodingchallenge.di.nasaimage
 
 import androidx.lifecycle.ViewModel
+import com.robelseyoum3.perseuscodingchallenge.di.applevel.ViewModelKey
 import com.robelseyoum3.perseuscodingchallenge.ui.nasaImage.NasaImageViewModel
 import dagger.Binds
 import dagger.Module

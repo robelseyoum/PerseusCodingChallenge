@@ -1,6 +1,6 @@
 package com.robelseyoum3.perseuscodingchallenge
 
-import com.robelseyoum3.perseuscodingchallenge.di.DaggerAppComponent
+import com.robelseyoum3.perseuscodingchallenge.di.applevel.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 

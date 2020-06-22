@@ -1,9 +1,5 @@
-package com.robelseyoum3.perseuscodingchallenge.di
+package com.robelseyoum3.perseuscodingchallenge.di.applevel
 
-import android.app.Application
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.robelseyoum3.perseuscodingchallenge.data.remote.WebServices

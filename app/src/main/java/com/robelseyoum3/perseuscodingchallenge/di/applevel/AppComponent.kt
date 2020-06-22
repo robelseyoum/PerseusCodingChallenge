@@ -1,4 +1,4 @@
-package com.robelseyoum3.perseuscodingchallenge.di
+package com.robelseyoum3.perseuscodingchallenge.di.applevel
 
 import android.app.Application
 import com.robelseyoum3.perseuscodingchallenge.BaseApplication
