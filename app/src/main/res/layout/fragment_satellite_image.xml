@@ -64,7 +64,7 @@
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnRetry"
+            android:id="@+id/btnRetrySat"
             android:background="@color/error"
             android:textColor="@android:color/white"
             android:text="@string/retry"/>

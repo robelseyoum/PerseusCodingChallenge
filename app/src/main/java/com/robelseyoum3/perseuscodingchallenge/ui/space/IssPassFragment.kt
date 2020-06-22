@@ -68,6 +68,10 @@ class IssPassFragment : DaggerFragment() {
                     else -> displayMessageContainer("Unknown Error")
                 }
         })
+
+        btnRetry.setOnClickListener {
+            viewModel.getISSOverheadLocation(latitude, longitude)
+        }
     }
 
     private fun displayMessageContainer(message: String?) {

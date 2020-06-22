@@ -42,12 +42,9 @@ class SpaceViewModelTest {
         spaceViewModel = SpaceViewModel(repository)
     }
 
-
     /**
      * Test cases for getting overhead times scenario
      */
-
-
     private val LATITUDE = "37.4219983"
     private val LONGITUDE = "-122.084"
     private val DATE = "2020-06-18"
@@ -92,7 +89,6 @@ class SpaceViewModelTest {
         every{  repository.getFromSpaceStation(LATITUDE, LONGITUDE) } returns
                 (Single.error(UnknownHostException(noNetworkError)))
 
-
         spaceViewModel.getISSOverheadLocation(LATITUDE, LONGITUDE)
 
         assertEquals(SpaceViewModel.LoadingState.ERROR(noNetworkError), spaceViewModel.loadingState.value)
@@ -106,7 +102,6 @@ class SpaceViewModelTest {
 
         every{  repository.getFromSpaceStation(LATITUDE, LONGITUDE) } returns
                 Single.error(RuntimeException(otherError))
-
 
         spaceViewModel.getISSOverheadLocation(LATITUDE, LONGITUDE)
 
