@@ -8,8 +8,9 @@ import com.robelseyoum3.perseuscodingchallenge.data.remote.WebServices
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class SpaceRepository(private val webServices: WebServices) {
+class SpaceRepository @Inject constructor(private val webServices: WebServices) {
 
     fun getFromSpaceStation(latitude: String, longitude: String): Single<OpenNotify> {
         return webServices
