@@ -1,4 +1,4 @@
-package com.robelseyoum3.perseuscodingchallenge.ui.space
+package com.robelseyoum3.perseuscodingchallenge.ui.spacenasaimage
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -52,14 +52,12 @@ class SpaceActivity : BaseActivity() {
     /**
      * get location data is code snippet is inspired from
      * https://www.androdocs.com/tutorials/getting-current-location-latitude-longitude-in-android-using-kotlin.html
-     * https://www.androdocs.com/tutorials/getting-current-location-latitude-longitude-in-android-using-kotlin.html
      */
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-
                 mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
                     var location: Location? = task.result
                     if (location == null) {

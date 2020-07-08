@@ -5,7 +5,7 @@ import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.OpenNotif
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Request
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.data.repository.SpaceRepository
-import com.robelseyoum3.perseuscodingchallenge.ui.space.SpaceViewModel
+import com.robelseyoum3.perseuscodingchallenge.ui.spacenasaimage.SpaceViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

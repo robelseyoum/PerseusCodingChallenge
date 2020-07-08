@@ -1,8 +1,8 @@
-package com.robelseyoum3.perseuscodingchallenge.di.space
+package com.robelseyoum3.perseuscodingchallenge.di.spaceandnasa
 
 import androidx.lifecycle.ViewModel
 import com.robelseyoum3.perseuscodingchallenge.di.applevel.ViewModelKey
-import com.robelseyoum3.perseuscodingchallenge.ui.space.SpaceViewModel
+import com.robelseyoum3.perseuscodingchallenge.ui.spacenasaimage.SpaceViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

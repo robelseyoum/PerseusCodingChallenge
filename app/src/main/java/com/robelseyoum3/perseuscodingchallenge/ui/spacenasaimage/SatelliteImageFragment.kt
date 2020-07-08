@@ -1,36 +1,27 @@
-package com.robelseyoum3.perseuscodingchallenge.ui.nasaimage
+package com.robelseyoum3.perseuscodingchallenge.ui.spacenasaimage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.nasaimage.EarthPicture
-import com.robelseyoum3.perseuscodingchallenge.ui.space.IssPassFragment
-import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.API_KEY
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.API_KEY_PLACEHOLDER
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.BASE_URL_NASA
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.DATE_PLACEHOLDER
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.LAT
+import com.robelseyoum3.perseuscodingchallenge.utils.Resource
 import com.squareup.picasso.Picasso
-import dagger.android.support.DaggerFragment
-
 import kotlinx.android.synthetic.main.fragment_satellite_image.*
-import javax.inject.Inject
 
-class SatelliteImageFragment : DaggerFragment() {
+class SatelliteImageFragment : BaseSpaceImageFragment() {
 
     lateinit var latitude: String
     lateinit var longitude: String
     lateinit var currentDate: String
-
-    @Inject
-    lateinit var providerFactory: ViewModelProviderFactory
-
-    lateinit var nasaImageViewModel: NasaImageViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,10 +34,7 @@ class SatelliteImageFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        nasaImageViewModel = activity?.run {
-            ViewModelProvider(this, providerFactory).get(NasaImageViewModel::class.java)
-        }?: throw Exception("Invalid Activity")
+        Log.d(TAG, "SatelliteImageFragment: ${viewModel.hashCode()} ")
 
         latitude = arguments?.getString(IssPassFragment.LATITUDE1).orEmpty()
         longitude = arguments?.getString(IssPassFragment.LONGITUDE1).orEmpty()
@@ -59,19 +47,19 @@ class SatelliteImageFragment : DaggerFragment() {
         val sampleDate = "2020-06-20" //use this sample date if the API didn't response the IMAGE with a current date
         val basUrl = "$BASE_URL_NASA$longitude$LAT$latitude$DATE_PLACEHOLDER$sampleDate$API_KEY_PLACEHOLDER$API_KEY"
 
-        nasaImageViewModel.getSatelliteImage(basUrl)
+        viewModel.getSatelliteImage(basUrl)
 
-        nasaImageViewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            when(it){
-                is NasaImageViewModel.LoadingState.LOADING -> displayProgressbar()
-                is NasaImageViewModel.LoadingState.SUCCESS -> displayImage(it.response)
-                is NasaImageViewModel.LoadingState.ERROR -> displayMessageContainer(it.message)
+        viewModel.notifyNasaImageResults.observe(viewLifecycleOwner, Observer { data ->
+            when(data){
+                is Resource.Loading -> displayProgressbar()
+                is Resource.Success -> displayImage(data.data)
+                is Resource.Error -> displayMessageContainer(data.message)
                 else -> displayMessageContainer("Unknown Error")
             }
         })
 
         btnRetrySat.setOnClickListener {
-            nasaImageViewModel.getSatelliteImage(basUrl)
+            viewModel.getSatelliteImage(basUrl)
         }
 
     }

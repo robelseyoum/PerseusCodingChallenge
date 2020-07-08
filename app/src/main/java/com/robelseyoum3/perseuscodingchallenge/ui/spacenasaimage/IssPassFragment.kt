@@ -1,6 +1,7 @@
-package com.robelseyoum3.perseuscodingchallenge.ui.space
+package com.robelseyoum3.perseuscodingchallenge.ui.spacenasaimage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -8,25 +9,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.robelseyoum3.perseuscodingchallenge.R
 import com.robelseyoum3.perseuscodingchallenge.data.model.isspasstimes.Response
 import com.robelseyoum3.perseuscodingchallenge.ui.adapter.SpaceAdapter
-import com.robelseyoum3.perseuscodingchallenge.ui.nasaimage.SatelliteImageFragment
 import com.robelseyoum3.perseuscodingchallenge.ui.viewmodel.ViewModelProviderFactory
+import com.robelseyoum3.perseuscodingchallenge.utils.Resource
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_isspasstimes.*
 import javax.inject.Inject
 
 
-class IssPassFragment : DaggerFragment() {
+class IssPassFragment : BaseSpaceImageFragment() {
 
     lateinit var spaceAdapter: SpaceAdapter
     lateinit var latitude: String
     lateinit var longitude: String
     lateinit var currentDate: String
-
-    @Inject
-    lateinit var providerFactory: ViewModelProviderFactory
-
-    lateinit var viewModel: SpaceViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +34,8 @@ class IssPassFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = activity?.run {
-            ViewModelProvider(this, providerFactory).get(SpaceViewModel::class.java)
-        }?: throw Exception("Invalid Activity")
+        Log.d(TAG, "IssPassFragment: ${viewModel.hashCode()} ")
 
-   //     Log.d(TAG, "IssPassFragment: ${viewModel.hashCode()} ")
         setupRecyclerView()
         latitude = arguments?.getString(LATITUDE1).orEmpty()
         longitude = arguments?.getString(LONGITUDE1).orEmpty()
@@ -57,14 +49,13 @@ class IssPassFragment : DaggerFragment() {
             viewModel.getISSOverheadLocation(latitude, longitude)
         }
 
-
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            when(it){
-                    is SpaceViewModel.LoadingState.LOADING -> displayProgressbar()
-                    is SpaceViewModel.LoadingState.SUCCESS-> displayList(it.response.toMutableList())
-                    is SpaceViewModel.LoadingState.ERROR -> displayMessageContainer(it.message)
-                    else -> displayMessageContainer("Unknown Error")
-                }
+        viewModel.notifyResults.observe(viewLifecycleOwner, Observer { data ->
+            when(data){
+                is Resource.Loading -> displayProgressbar()
+                is Resource.Success -> displayList(data.data!!.toMutableList())
+                is Resource.Error -> displayMessageContainer(data.message)
+                else -> displayMessageContainer("Unknown Error")
+            }
         })
 
         btnRetry.setOnClickListener {

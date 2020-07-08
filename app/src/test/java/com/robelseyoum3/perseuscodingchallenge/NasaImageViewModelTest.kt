@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.robelseyoum3.perseuscodingchallenge.data.model.nasaimage.EarthPicture
 import com.robelseyoum3.perseuscodingchallenge.data.model.nasaimage.Resource
 import com.robelseyoum3.perseuscodingchallenge.data.repository.SpaceRepository
-import com.robelseyoum3.perseuscodingchallenge.ui.nasaimage.NasaImageViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

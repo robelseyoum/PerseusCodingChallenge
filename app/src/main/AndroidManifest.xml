@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".ui.space.SpaceActivity">
+        <activity android:name=".ui.spacenasaimage.SpaceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
