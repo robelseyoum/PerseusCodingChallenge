@@ -49,6 +49,12 @@ class SpaceActivity : BaseActivity() {
         Log.d(TAG, "Dates : $currentDate")
     }
 
+    /**
+     * get location data is code snippet is inspired from
+     * https://www.androdocs.com/tutorials/getting-current-location-latitude-longitude-in-android-using-kotlin.html
+     * https://www.androdocs.com/tutorials/getting-current-location-latitude-longitude-in-android-using-kotlin.html
+     */
+
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         if (checkPermissions()) {
@@ -132,9 +138,7 @@ class SpaceActivity : BaseActivity() {
     }
 
     private fun isLocationEnabled(): Boolean {
-
         val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )

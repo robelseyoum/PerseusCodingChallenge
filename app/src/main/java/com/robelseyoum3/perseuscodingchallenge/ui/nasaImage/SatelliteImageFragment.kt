@@ -1,7 +1,6 @@
-package com.robelseyoum3.perseuscodingchallenge.ui.nasaImage
+package com.robelseyoum3.perseuscodingchallenge.ui.nasaimage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.DATE_PL
 import com.robelseyoum3.perseuscodingchallenge.utils.Constants.Companion.LAT
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_isspasstimes.*
 
 import kotlinx.android.synthetic.main.fragment_satellite_image.*
 import javax.inject.Inject
