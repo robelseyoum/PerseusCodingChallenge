@@ -49,4 +49,9 @@ class NasaImageViewModel @Inject constructor(private val spaceRepository: SpaceR
         data class SUCCESS(val response: EarthPicture) : LoadingState()
         data class ERROR(val message: String) : LoadingState()
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
 }

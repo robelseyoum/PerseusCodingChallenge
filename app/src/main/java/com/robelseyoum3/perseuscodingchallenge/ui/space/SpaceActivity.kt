@@ -26,6 +26,7 @@ import javax.inject.Inject
 class SpaceActivity : BaseActivity() {
 
     private val PERMISSION_ID = 42
+    //Fused Location Provider API to get users current position.
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     private lateinit var currentDate: String
 
@@ -39,6 +40,12 @@ class SpaceActivity : BaseActivity() {
         setContentView(R.layout.activity_space)
         viewModel = ViewModelProvider(this, providerFactory).get(SpaceViewModel::class.java)
 
+        /**
+         * The fused location provider retrieves the device's last known location.
+           It provides simple and easy to use APIs.
+           Provides high accuracy over other options.
+           Utilizes low power by choosing the most efficient way to access the location.
+         */
         mFusedLocationClient  = LocationServices.getFusedLocationProviderClient(this)
         getLastLocation()
         currentDate()
@@ -49,6 +56,14 @@ class SpaceActivity : BaseActivity() {
         Log.d(TAG, "Dates : $currentDate")
     }
 
+    /**
+     * This is code is inspired from this tutorial
+     * https://www.androdocs.com/tutorials/getting-current-location-latitude-longitude-in-android-using-kotlin.html
+     *
+     *
+     *  which will use to API and return the last recorder location information of the device.
+     *  Also this method will check first if our permission is granted or not and if the location setting is turned on.
+     */
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         if (checkPermissions()) {
@@ -57,6 +72,8 @@ class SpaceActivity : BaseActivity() {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
                     var location: Location? = task.result
                     if (location == null) {
+                        //To avoid these rare cases when the location == null,
+                        // we called a new method requestNewLocationData() which will record the location information in runtime.
                         requestNewLocationData()
                     } else {
                         val bundle = Bundle()
@@ -64,7 +81,7 @@ class SpaceActivity : BaseActivity() {
                         Log.d(TAG, "Latitude: $latitude")
                         val longitude = location.longitude.toString()
                         Log.d(TAG, "Longitude: $longitude")
-                        passCoordination(latitude, longitude)
+                        passCoordination(latitude, longitude) //here the two coordinator is passed to
                     }
                 }
             } else {
@@ -76,7 +93,7 @@ class SpaceActivity : BaseActivity() {
             requestPermissions()
         }
     }
-
+    //here the two coordination location number is passed to Fragment
     private fun passCoordination(latitude: String, longitude: String)  {
         currentDate = SimpleDateFormat("yyy-MM-dd", Locale.getDefault()).format(Date())
         val coordinateNumber = IssPassFragment.newInstance(latitude, longitude, currentDate)
@@ -85,7 +102,11 @@ class SpaceActivity : BaseActivity() {
             .commit()
     }
 
-
+    /**
+     * To avoid these rare cases when the location == null, we called a new method requestNewLocationData()
+     * which will record the location information in runtime.
+     * This method will make a new location request with highest accuracy using LocationRequest.PRIORITY_HIGH_ACCURACY.
+     */
     @SuppressLint("MissingPermission")
     private fun requestNewLocationData() {
         var mLocationRequest = LocationRequest()
@@ -101,12 +122,20 @@ class SpaceActivity : BaseActivity() {
         )
     }
 
+    /**
+     * This callback used when an update receives it'll call a callBack method named mLocationCallback
+     * So when we get the location update, we set the latitude and longitude values in our TextViews.
+     */
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             var mLastLocation: Location = locationResult.lastLocation
+            //here we can use mLastLocation to get updated new location coordinator
         }
     }
 
+    /**
+     * This method will tell us whether or not the user grant us to access ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION.
+     */
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -115,6 +144,9 @@ class SpaceActivity : BaseActivity() {
         return false
     }
 
+    /**
+     * This method will request our necessary permissions to the user if they are not already granted.
+     */
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             this,
@@ -123,6 +155,9 @@ class SpaceActivity : BaseActivity() {
         )
     }
 
+    /**
+     * This method is called when a user Allow or Deny our requested permissions. So it will help us to move forward if the permissions are granted.
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -131,6 +166,10 @@ class SpaceActivity : BaseActivity() {
         }
     }
 
+    /**
+     * This will check if the user has turned on location from the setting, Cause user may grant the app to user location
+     * but if the location setting is off then it'll be of no use.
+     */
     private fun isLocationEnabled(): Boolean {
 
         val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager

@@ -1,7 +1,5 @@
 package com.robelseyoum3.perseuscodingchallenge.utils
 
-import java.time.LocalDateTime
-
 class Constants {
 
     companion object {
@@ -20,3 +18,30 @@ class Constants {
 
     }
 }
+
+
+//class Resource<T>(val status: Status, val data: T?, message: String) {
+//    val message: String?
+//
+//    enum class Status {
+//        SUCCESS, ERROR, LOADING
+//    }
+//
+//    companion object {
+//        fun <T> success(data: T, message: String): Resource<T> {
+//            return Resource(Status.SUCCESS, data, message)
+//        }
+//
+//        fun <T> error(data: T?, msg: String): Resource<T?> {
+//            return Resource(Status.ERROR, data, msg)
+//        }
+//
+//        fun <T> loading(data: T?): Resource<T?> {
+//            return Resource(Status.LOADING, data, null)
+//        }
+//    }
+//
+//    init {
+//        this.message = message
+//    }
+//}
